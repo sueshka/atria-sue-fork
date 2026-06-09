@@ -325,25 +325,16 @@ function Rig({ progress, offX, lowY, portrait }) {
   const { camera } = useThree()
   const look = useMemo(() => new THREE.Vector3(offX, 0.4, 0), [offX])
   const tmp = useMemo(() => new THREE.Vector3(), [])
+  const back = portrait ? 3 : 0 // pull camera back a touch on narrow screens
   const WP = useMemo(
-    () =>
-      portrait
-        ? [
-            // mobile: building sits in the UPPER half (camera looks low), then dives to the plan
-            { p: 0, pos: [2.6, 0.6, 19], look: [0, -1.9, 0] },
-            { p: 0.32, pos: [2.2, 2.4, 12], look: [0, -1.6, 0] },
-            { p: 0.56, pos: [1.6, 4.8, 7], look: [0, lowY + 0.2, 0] },
-            { p: 0.74, pos: [1.1, 6.0, 5], look: [0, lowY, 0] },
-            { p: 1, pos: [1.1, 6.0, 5], look: [0, lowY, 0] },
-          ]
-        : [
-            { p: 0, pos: [offX + 5.5, 1.2, 18.5], look: [offX, 0.4, 0] },
-            { p: 0.32, pos: [offX + 4.0, 3.2, 10.5], look: [offX, -0.4, 0] },
-            { p: 0.56, pos: [offX + 2.6, 5.2, 6.6], look: [offX, lowY + 0.3, 0] },
-            { p: 0.74, pos: [offX + 1.7, 6.4, 4.6], look: [offX, lowY, 0] },
-            { p: 1, pos: [offX + 1.7, 6.4, 4.6], look: [offX, lowY, 0] },
-          ],
-    [offX, lowY, portrait]
+    () => [
+      { p: 0, pos: [offX + 5.5, 1.2, 18.5 + back], look: [offX, 0.4, 0] },
+      { p: 0.32, pos: [offX + 4.0, 3.2, 10.5 + back], look: [offX, -0.4, 0] },
+      { p: 0.56, pos: [offX + 2.6, 5.2, 6.6 + back * 0.5], look: [offX, lowY + 0.3, 0] },
+      { p: 0.74, pos: [offX + 1.7, 6.4, 4.6 + back * 0.5], look: [offX, lowY, 0] },
+      { p: 1, pos: [offX + 1.7, 6.4, 4.6 + back * 0.5], look: [offX, lowY, 0] },
+    ],
+    [offX, lowY, back]
   )
   useFrame(() => {
     const p = clamp(progress.current, 0, 1)
@@ -376,7 +367,7 @@ function Rig({ progress, offX, lowY, portrait }) {
 export default function Tower({ progress }) {
   const { size } = useThree()
   const portrait = size.height > size.width
-  const s = portrait ? clamp(size.width / 1600, 0.3, 0.46) : clamp(size.width / 1500, 0.4, 0.62)
+  const s = clamp(size.width / 1500, 0.4, 0.62)
   const offX = portrait ? 0 : 1.5
   const spin = useRef()
 

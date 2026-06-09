@@ -1,6 +1,7 @@
 import { useSmoothScroll } from './lib/smooth.js'
 import Cursor from './components/Cursor.jsx'
 import Nav from './components/Nav.jsx'
+import ToTop from './components/ToTop.jsx'
 import BuildingHero from './components/BuildingHero.jsx'
 import Footer from './components/Footer.jsx'
 
@@ -38,6 +39,7 @@ export default function App() {
         <FinalCta />
       </main>
       <Footer />
+      <ToTop />
     </>
   )
 }
