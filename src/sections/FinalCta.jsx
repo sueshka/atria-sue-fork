@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { Accent } from '../lib/accent.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { finalCta as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const EASE = [0.16, 1, 0.3, 1]
 
@@ -38,6 +38,7 @@ function Magnetic({ children, href, className }) {
 }
 
 export default function FinalCta() {
+  const c = useContent().finalCta
   return (
     <section className={`section surface-${c.surface} cta2`} id={c.id}>
       <div className="glow" />

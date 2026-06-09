@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useContent } from '../i18n.jsx'
 
-export default function ToTop({ label = 'Наверх' }) {
+export default function ToTop() {
+  const label = useContent().ui.toTop
   const [show, setShow] = useState(false)
 
   useEffect(() => {

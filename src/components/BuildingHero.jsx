@@ -2,7 +2,7 @@ import { Suspense, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Tower from './Tower.jsx'
-import { hero } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const EASE = [0.16, 1, 0.3, 1]
 const lineUp = {
@@ -11,6 +11,7 @@ const lineUp = {
 }
 
 export default function BuildingHero() {
+  const hero = useContent().hero
   const wrapRef = useRef(null)
   const progress = useRef(0)
 
@@ -29,13 +30,20 @@ export default function BuildingHero() {
   const headY = useTransform(scrollYProgress, [0, 0.55], [0, -70])
   const headOp = useTransform(scrollYProgress, [0, 0.42], [1, 0])
   const barScale = useTransform(scrollYProgress, [0, 1], [0.02, 1])
+  const cueOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0])
 
-  const c1 = useTransform(scrollYProgress, [0.16, 0.26, 0.46, 0.54], [0, 1, 1, 0])
-  const c2 = useTransform(scrollYProgress, [0.48, 0.58], [0, 1])
-  const c3 = useTransform(scrollYProgress, [0.6, 0.7], [0, 1])
+  const c1 = useTransform(scrollYProgress, [0.3, 0.42, 0.92, 1], [0, 1, 1, 0])
+  const c2 = useTransform(scrollYProgress, [0.56, 0.68], [0, 1])
+  const c3 = useTransform(scrollYProgress, [0.74, 0.86], [0, 1])
   const own = useTransform(scrollYProgress, [0.7, 0.82], [0, 1])
   const ownY = useTransform(scrollYProgress, [0.7, 0.84], [18, 0])
-  const cueOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0])
+
+  const callOps = [c1, c2, c3]
+  const callPos = [
+    { top: '26%', right: '10%' },
+    { top: '60%', right: '14%' },
+    { top: '74%', right: '11%' },
+  ]
 
   return (
     <header className="bhero" ref={wrapRef} id="top" style={{ height: '300vh' }}>
@@ -53,33 +61,23 @@ export default function BuildingHero() {
           </Canvas>
         </div>
 
-        <motion.div className="bcallout" style={{ top: '26%', right: '10%', opacity: c1 }}>
-          <span>
-            <span className="v">14</span> этажей · класс A
-          </span>
-        </motion.div>
-        <motion.div className="bcallout" style={{ top: '60%', right: '14%', opacity: c2 }}>
-          <span>
-            1 м² · <span className="v">от $115</span>
-          </span>
-        </motion.div>
-        <motion.div className="bcallout" style={{ top: '74%', right: '11%', opacity: c3 }}>
-          <span>
-            ваши метры <span className="v">·</span> поэтажный план
-          </span>
-        </motion.div>
+        {hero.callouts.map((t, i) => (
+          <motion.div className="bcallout" key={t} style={{ ...callPos[i], opacity: callOps[i] }}>
+            <span>{t}</span>
+          </motion.div>
+        ))}
 
         <motion.div className="own-card" style={{ opacity: own, y: ownY }}>
           <span className="own-dot" />
           <div>
-            <div className="own-t">Токенизировано</div>
-            <div className="own-a">0x7F3…A91 · владелец</div>
-            <div className="own-m">1 м² · ATRIA Tower</div>
+            <div className="own-t">{hero.own.tag}</div>
+            <div className="own-a">{hero.own.addr}</div>
+            <div className="own-m">{hero.own.m}</div>
           </div>
         </motion.div>
 
         <motion.div className="bhero-scroll" style={{ opacity: cueOpacity }}>
-          <span>Листайте вниз</span>
+          <span>{hero.cue}</span>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 4v15M6 13l6 6 6-6" />
           </svg>
@@ -89,27 +87,28 @@ export default function BuildingHero() {
           <div className="bhero-top">
             <span className="eyebrow">{hero.eyebrow}</span>
             <span className="mono" style={{ color: 'var(--ink-3)' }}>
-              БИШКЕК · 42.87°N
+              {hero.coords}
             </span>
           </div>
 
           <motion.div className="bhero-headline" style={{ y: headY, opacity: headOp }}>
             <h1>
-              <span className="bhero-line">
-                <motion.span style={{ display: 'block' }} variants={lineUp} initial="hidden" animate="visible" custom={0.3}>
-                  Реальная
-                </motion.span>
-              </span>
-              <span className="bhero-line">
-                <motion.span style={{ display: 'block' }} variants={lineUp} initial="hidden" animate="visible" custom={0.4}>
-                  недвижимость
-                </motion.span>
-              </span>
-              <span className="bhero-line">
-                <motion.span style={{ display: 'block' }} variants={lineUp} initial="hidden" animate="visible" custom={0.5}>
-                  <span className="it">по метру</span>
-                </motion.span>
-              </span>
+              {hero.lines.map((ln, i) => {
+                const text = ln.t.replace(/\*/g, '')
+                return (
+                  <span className="bhero-line" key={ln.t}>
+                    <motion.span
+                      style={{ display: 'block' }}
+                      variants={lineUp}
+                      initial="hidden"
+                      animate="visible"
+                      custom={0.3 + i * 0.1}
+                    >
+                      {ln.accent ? <span className="it">{text}</span> : text}
+                    </motion.span>
+                  </span>
+                )
+              })}
             </h1>
             <motion.p
               className="bhero-sub"
@@ -140,8 +139,8 @@ export default function BuildingHero() {
               <motion.i style={{ scaleX: barScale }} />
             </div>
             <div className="bhero-readout">
-              <span className="big">от $115</span>
-              <span>ЗА 1 м² · ЛИСТАЙТЕ ВНУТРЬ ↓</span>
+              <span className="big">{hero.readout.big}</span>
+              <span>{hero.readout.label}</span>
             </div>
           </div>
         </div>

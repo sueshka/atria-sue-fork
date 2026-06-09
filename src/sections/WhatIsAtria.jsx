@@ -1,8 +1,11 @@
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { whatIs as c, creds } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 export default function WhatIsAtria() {
+  const data = useContent()
+  const c = data.whatIs
+  const creds = data.creds
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
       <div className="container">

@@ -3,12 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Accent } from '../lib/accent.jsx'
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { portfolio as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
-const badgeClass = (s) =>
-  s === 'Открыт к покупке' ? 'open' : s === 'Скоро' ? 'soon' : 'sold'
-
-function PCard({ p, i }) {
+function PCard({ p, i, ui }) {
   const [open, setOpen] = useState(false)
   return (
     <Reveal as="article" className="pcard" delay={i * 0.08} y={28} amount={0.15}>
@@ -16,7 +13,7 @@ function PCard({ p, i }) {
         className="pcard-img"
         style={p.img ? { backgroundImage: `url(${p.img})` } : { background: p.bg }}
       >
-        <span className={`pcard-badge ${badgeClass(p.status)}`}>{p.status}</span>
+        <span className={`pcard-badge ${p.statusKey}`}>{p.status}</span>
       </div>
       <div className="pcard-body">
         <span className="loc">{p.district}</span>
@@ -25,29 +22,31 @@ function PCard({ p, i }) {
 
         <div className="pcard-metrics">
           <div>
-            <span className="mk">Цена / м²</span>
+            <span className="mk">{ui.mPrice}</span>
             <span className="mv">
               <span className="u">{p.price[0]}</span>
               {p.price.slice(1)}
             </span>
           </div>
           <div>
-            <span className="mk">Площадь</span>
+            <span className="mk">{ui.mArea}</span>
             <span className="mv">{p.area}</span>
           </div>
           <div>
-            <span className="mk">Заполнено</span>
+            <span className="mk">{ui.mOcc}</span>
             <span className="mv">{p.occupancy}%</span>
           </div>
           <div>
-            <span className="mk">Выкуплено</span>
+            <span className="mk">{ui.mBought}</span>
             <span className="mv">{p.bought}%</span>
           </div>
         </div>
 
         <div className="pbar-head">
-          <span>Выкуплено {p.bought}%</span>
-          <span>{p.status === 'Распродан' ? 'мест нет' : 'идёт продажа'}</span>
+          <span>
+            {ui.bought} {p.bought}%
+          </span>
+          <span>{p.statusKey === 'sold' ? ui.soldOut : ui.selling}</span>
         </div>
         <div className="pbar">
           <motion.i
@@ -74,7 +73,7 @@ function PCard({ p, i }) {
             textAlign: 'left',
           }}
         >
-          {open ? 'Скрыть детали −' : 'Детали объекта +'}
+          {open ? ui.detailsHide : ui.detailsShow}
         </button>
         <AnimatePresence initial={false}>
           {open && (
@@ -87,11 +86,11 @@ function PCard({ p, i }) {
               style={{ overflow: 'hidden' }}
             >
               <div>
-                <span className="dl">Арендаторы</span>
+                <span className="dl">{ui.tenants}</span>
                 {p.tenants}
               </div>
               <div>
-                <span className="dl">Компания-владелец (SPV)</span>
+                <span className="dl">{ui.spv}</span>
                 {p.spv}
               </div>
             </motion.div>
@@ -103,8 +102,9 @@ function PCard({ p, i }) {
 }
 
 export default function Portfolio() {
-  const [filter, setFilter] = useState('Все')
-  const items = filter === 'Все' ? c.items : c.items.filter((p) => p.status === filter)
+  const c = useContent().portfolio
+  const [filter, setFilter] = useState('all')
+  const items = filter === 'all' ? c.items : c.items.filter((p) => p.statusKey === filter)
 
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
@@ -113,17 +113,23 @@ export default function Portfolio() {
 
         <div className="chips">
           {c.filters.map((f) => (
-            <button key={f} className={`chip-btn ${filter === f ? 'on' : ''}`} onClick={() => setFilter(f)}>
-              {f}
+            <button
+              key={f.key}
+              className={`chip-btn ${filter === f.key ? 'on' : ''}`}
+              onClick={() => setFilter(f.key)}
+            >
+              {f.label}
             </button>
           ))}
-          <span className="count">{items.length} объектов</span>
+          <span className="count">
+            {items.length} {c.ui.count}
+          </span>
         </div>
 
         <motion.div className="pgrid" layout>
           <AnimatePresence>
             {items.map((p, i) => (
-              <PCard key={p.name} p={p} i={i} />
+              <PCard key={p.name} p={p} i={i} ui={c.ui} />
             ))}
           </AnimatePresence>
         </motion.div>

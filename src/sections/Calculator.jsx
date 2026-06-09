@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Accent } from '../lib/accent.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { calc as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const money = (n) => '$' + Math.round(n).toLocaleString('ru-RU')
 
 export default function Calculator() {
+  const c = useContent().calc
+  const ui = c.ui
   const [amount, setAmount] = useState(1150)
   const [rate, setRate] = useState(8)
   const [period, setPeriod] = useState('quarter')
@@ -39,7 +41,7 @@ export default function Calculator() {
 
         <Reveal as="div" className="calc-card" y={24}>
           <div className="calc-field">
-            <span className="lab">Ваш вклад</span>
+            <span className="lab">{ui.contribution}</span>
             <div className="big">{money(amount)}</div>
             <input
               type="range"
@@ -48,14 +50,14 @@ export default function Calculator() {
               step={115}
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
-              aria-label="Сумма вложения"
+              aria-label={ui.contribution}
             />
-            <div className="calc-sub">от $115 за 1 м²</div>
+            <div className="calc-sub">{ui.priceNote}</div>
           </div>
 
           <div className="calc-field">
             <span className="lab">
-              ≈ <strong style={{ color: 'var(--amber-deep, var(--amber))' }}>{m2} м²</strong> офиса
+              ≈ <strong style={{ color: 'var(--amber-deep, var(--amber))' }}>{m2}</strong> {ui.m2suffix}
             </span>
             <div className="calc-m2" aria-hidden="true">
               {Array.from({ length: 48 }, (_, i) => (
@@ -65,8 +67,8 @@ export default function Calculator() {
           </div>
 
           <div className="calc-field">
-            <span className="calc-warn">Пример · не обещание</span>
-            <span className="lab">Иллюстративная доходность аренды / год</span>
+            <span className="calc-warn">{ui.warn}</span>
+            <span className="lab">{ui.rateLabel}</span>
             <div className="big">
               {rate.toFixed(1)}
               <span className="u">%</span>
@@ -78,14 +80,14 @@ export default function Calculator() {
               step={0.5}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
-              aria-label="Иллюстративная ставка доходности"
+              aria-label={ui.rateLabel}
             />
           </div>
 
           <div className="calc-toggle" role="tablist">
             {[
-              ['quarter', 'В квартал'],
-              ['year', 'В год'],
+              ['quarter', ui.toggleQuarter],
+              ['year', ui.toggleYear],
             ].map(([key, label]) => (
               <button
                 key={key}
@@ -101,10 +103,10 @@ export default function Calculator() {
           </div>
 
           <div className="calc-result">
-            <span className="lab">Пример выплаты {period === 'quarter' ? 'за квартал' : 'за год'}</span>
+            <span className="lab">{period === 'quarter' ? ui.resultQuarter : ui.resultYear}</span>
             <div className="big">≈ {money(payout)}</div>
             <div className="formula">
-              {money(amount)} × {rate.toFixed(1)}%{period === 'quarter' ? ' ÷ 4' : ''} = пример выплаты
+              {money(amount)} × {rate.toFixed(1)}%{period === 'quarter' ? ' ÷ 4' : ''} {ui.formulaTail}
             </div>
           </div>
 

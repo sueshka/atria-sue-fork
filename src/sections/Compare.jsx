@@ -1,11 +1,12 @@
 import { Fragment } from 'react'
 import SHead from '../components/SHead.jsx'
-import { compare as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const MARK = { '+': '+', '-': '−', o: '•' }
 const MARKCLASS = { '+': 'plus', '-': 'minus', o: 'o' }
 
 export default function Compare() {
+  const c = useContent().compare
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
       <div className="container">
@@ -13,7 +14,7 @@ export default function Compare() {
 
         <div className="cmp-scroll">
           <div className="cmp-grid">
-            <div className="ch">Что сравниваем</div>
+            <div className="ch">{c.axisHeader}</div>
             {c.columns.map((col, i) => (
               <div className={`ch ${i === 3 ? 'atria cmp-col-atria' : ''}`} key={col}>
                 {i === 3 ? <span className="cmp-badge">ATRIA</span> : col}

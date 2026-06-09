@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { rwa as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const ICONS = [
   // building
@@ -25,6 +25,7 @@ const ICONS = [
 ]
 
 export default function RwaExplainer() {
+  const c = useContent().rwa
   const [open, setOpen] = useState(0)
 
   return (
@@ -47,7 +48,7 @@ export default function RwaExplainer() {
 
         <Reveal as="div" style={{ marginBottom: 'clamp(2.5rem,5vw,4rem)' }}>
           <span className="eyebrow" style={{ marginBottom: '1.2rem' }}>
-            Четыре слова, которые пугают — и что они значат
+            {c.termsTitle}
           </span>
         </Reveal>
 

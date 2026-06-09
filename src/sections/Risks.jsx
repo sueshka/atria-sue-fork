@@ -1,22 +1,21 @@
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { risks as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
-const MARK = 'Что важно понимать:'
-
-function RiskText({ text }) {
-  const idx = text.indexOf(MARK)
+function RiskText({ text, mark }) {
+  const idx = mark ? text.indexOf(mark) : -1
   if (idx === -1) return <span>{text}</span>
   return (
     <>
       {text.slice(0, idx)}
-      <span className="imp">{MARK}</span>
-      {text.slice(idx + MARK.length)}
+      <span className="imp">{mark}</span>
+      {text.slice(idx + mark.length)}
     </>
   )
 }
 
 export default function Risks() {
+  const c = useContent().risks
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
       <div className="container">
@@ -31,7 +30,7 @@ export default function Risks() {
                 {it.value && <div className="rv">{it.value}</div>}
               </div>
               <p className="rt">
-                <RiskText text={it.text} />
+                <RiskText text={it.text} mark={c.impLabel} />
               </p>
             </Reveal>
           ))}

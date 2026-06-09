@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Accent } from '../lib/accent.jsx'
-import { faq as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 export default function Faq() {
-  const [tab, setTab] = useState('Все')
+  const c = useContent().faq
+  const [tab, setTab] = useState('all')
   const [open, setOpen] = useState(0)
 
-  const items = tab === 'Все' ? c.items : c.items.filter((it) => it.group === tab)
+  const items = tab === 'all' ? c.items : c.items.filter((it) => it.groupKey === tab)
 
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
@@ -29,7 +30,7 @@ export default function Faq() {
               marginTop: '1.6rem',
             }}
           >
-            Не нашли ответ? → Написать нам
+            {c.contact}
           </a>
         </div>
 
@@ -37,14 +38,14 @@ export default function Faq() {
           <div className="faq-tabs">
             {c.tabs.map((t) => (
               <button
-                key={t}
-                className={`faq-tab ${tab === t ? 'on' : ''}`}
+                key={t.key}
+                className={`faq-tab ${tab === t.key ? 'on' : ''}`}
                 onClick={() => {
-                  setTab(t)
+                  setTab(t.key)
                   setOpen(0)
                 }}
               >
-                {t}
+                {t.label}
               </button>
             ))}
           </div>

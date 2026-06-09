@@ -1,6 +1,7 @@
-import { footer, nav } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 export default function Footer() {
+  const footer = useContent().footer
   return (
     <footer className="footer">
       <div className="container">
@@ -23,8 +24,8 @@ export default function Footer() {
         <p className="footer-disclaimer">{footer.disclaimer}</p>
 
         <div className="footer-bottom">
-          <span>© 2026 ATRIA — Токенизация недвижимости Кыргызстана</span>
-          <span>Бишкек · {nav.cta} · hello@atria.kg</span>
+          <span>{footer.bottomLeft}</span>
+          <span>{footer.bottomRight}</span>
         </div>
       </div>
     </footer>

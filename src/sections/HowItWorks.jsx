@@ -1,8 +1,9 @@
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { how as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 export default function HowItWorks() {
+  const c = useContent().how
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
       <div className="container">

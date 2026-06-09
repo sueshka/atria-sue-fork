@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { nav } from '../content.js'
+import { useContent, useLang } from '../i18n.jsx'
 
 export default function Nav() {
+  const data = useContent()
+  const nav = data.nav
+  const ui = data.ui
+  const { lang, setLang } = useLang()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -28,6 +32,15 @@ export default function Nav() {
             {l.label}
           </a>
         ))}
+        <button
+          className="lang-toggle"
+          onClick={() => setLang(lang === 'ru' ? 'kg' : 'ru')}
+          aria-label="Тил / Язык"
+        >
+          <span className={lang === 'ru' ? 'on' : ''}>{ui.langRu}</span>
+          <span className="sep">/</span>
+          <span className={lang === 'kg' ? 'on' : ''}>{ui.langKg}</span>
+        </button>
         <a href="#cta" className="nav-cta magnetic">
           {nav.cta}
         </a>

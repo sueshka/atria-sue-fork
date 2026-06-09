@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { trust as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const ICONS = [
   // law / scales
@@ -63,6 +63,7 @@ function Pillar({ p, i, icon }) {
 }
 
 export default function TrustLegal() {
+  const c = useContent().trust
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
       <div className="container">

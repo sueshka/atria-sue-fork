@@ -1,3 +1,4 @@
+import { LangProvider } from './i18n.jsx'
 import { useSmoothScroll } from './lib/smooth.js'
 import Cursor from './components/Cursor.jsx'
 import Nav from './components/Nav.jsx'
@@ -17,9 +18,8 @@ import Risks from './sections/Risks.jsx'
 import Faq from './sections/Faq.jsx'
 import FinalCta from './sections/FinalCta.jsx'
 
-export default function App() {
+function Site() {
   useSmoothScroll()
-
   return (
     <>
       <Cursor />
@@ -41,5 +41,13 @@ export default function App() {
       <Footer />
       <ToTop />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <LangProvider>
+      <Site />
+    </LangProvider>
   )
 }

@@ -276,17 +276,16 @@ body::after {
   z-index: 9999;
 }
 .cursor-dot {
-  width: 7px;
-  height: 7px;
-  background: #fff;
-  mix-blend-mode: difference;
+  width: 8px;
+  height: 8px;
+  background: var(--amber);
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9), 0 0 0 2.5px rgba(20, 21, 24, 0.18);
 }
 .cursor-ring {
   width: 38px;
   height: 38px;
-  border: 1px solid #fff;
+  border: 1.5px solid var(--amber);
   opacity: 0.7;
-  mix-blend-mode: difference;
 }
 @media (pointer: coarse) {
   .cursor-dot,
@@ -377,6 +376,25 @@ body::after {
 }
 .nav-links .nav-cta:hover {
   transform: translateY(-2px);
+}
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  transition: color 0.3s var(--ease);
+}
+.lang-toggle .on {
+  color: var(--ink);
+}
+.lang-toggle .sep {
+  opacity: 0.4;
+}
+.lang-toggle:hover {
+  color: var(--ink-2);
 }
 @media (max-width: 760px) {
   .nav-links a:not(.nav-cta) {
@@ -534,20 +552,6 @@ body::after {
 
 /* mobile: fade the lower scene into the page so overlay text stays readable */
 @media (max-width: 760px) {
-  .bhero-sticky::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      transparent 28%,
-      color-mix(in srgb, var(--bone) 72%, transparent) 50%,
-      var(--bone) 64%,
-      var(--bone) 100%
-    );
-  }
   .bhero-scroll {
     display: none;
   }
@@ -645,11 +649,13 @@ body::after {
   }
   .bhero-headline h1 {
     font-size: clamp(1.9rem, 7.4vw, 2.6rem);
+    text-shadow: 0 1px 16px var(--bone), 0 0 30px var(--bone);
   }
   .bhero-sub {
     max-width: 100%;
     font-size: 0.92rem;
     margin-top: 0.9rem;
+    text-shadow: 0 1px 14px var(--bone), 0 1px 4px var(--bone);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;

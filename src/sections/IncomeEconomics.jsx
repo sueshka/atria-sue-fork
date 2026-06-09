@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
-import { income as c } from '../content.js'
+import { useContent } from '../i18n.jsx'
 
 const HEIGHTS = [220, 158, 120, 80]
 
 export default function IncomeEconomics() {
+  const c = useContent().income
   return (
     <section className={`section surface-${c.surface}`} id={c.id}>
       <div className="container">
@@ -30,7 +31,7 @@ export default function IncomeEconomics() {
         </div>
 
         <Reveal as="div" className="disclaimer-strip">
-          <span className="d-tag">Пример · не гарантия</span>
+          <span className="d-tag">{c.disclaimerTag}</span>
           <span className="d-txt">{c.microcopy}</span>
         </Reveal>
 
