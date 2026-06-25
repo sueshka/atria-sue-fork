@@ -2427,12 +2427,14 @@ body::after {
   letter-spacing: 0.03em;
   color: var(--ink-3);
   line-height: 1.2;
+  white-space: nowrap;
 }
 .pcard-metrics .mv {
   display: block;
   font-size: 1rem;
   font-weight: 500;
   line-height: 1;
+  white-space: nowrap;
 }
 .pcard-metrics .mv .u {
   color: var(--amber);
@@ -3231,5 +3233,289 @@ body::after {
 @media (max-width: 480px) {
   .lic-card {
     border-radius: 16px;
+  }
+}
+
+/* ---- Кнопки действий на карточке объекта ---- */
+.pcard-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.pcard-actions .btn {
+  flex: 1;
+  justify-content: center;
+  padding-inline: 0.9rem;
+}
+
+/* ---- Модалка покупки доли (RWA) ---- */
+.buy-card {
+  width: min(100%, 560px);
+}
+.buy-title {
+  margin-top: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+.buy-price-line {
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  margin-bottom: 0;
+}
+.buy-price-line strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.buy-rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.4rem 0;
+}
+.buy-qty-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.buy-qty-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.buy-qty-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--amber-deep, var(--amber));
+}
+.buy-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.9rem;
+}
+.buy-slider-row input[type='range'] {
+  flex: 1;
+  accent-color: var(--amber);
+  cursor: pointer;
+}
+.buy-qty-input {
+  width: 92px;
+  padding: 0.7rem 0.8rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.buy-qty-input:focus {
+  outline: none;
+  border-color: var(--amber);
+}
+.buy-range-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--ink-3);
+}
+.buy-summary {
+  margin-top: 1.4rem;
+  padding: 1.3rem 1.4rem;
+  background: var(--bone);
+  border-radius: 14px;
+}
+.buy-summary .buy-rule {
+  margin: 1rem 0;
+}
+.buy-summary-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+}
+.buy-summary-row + .buy-summary-row {
+  margin-top: 0.7rem;
+}
+.buy-summary-row strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.buy-income {
+  color: #2f7d4f;
+}
+.buy-total-row {
+  font-size: 1.05rem;
+}
+.buy-total-row span {
+  font-weight: 600;
+  color: var(--ink);
+}
+.buy-total {
+  font-size: 1.4rem;
+  color: var(--amber-deep, var(--amber)) !important;
+}
+.buy-compliance {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.3rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--amber) 35%, var(--line));
+  background: color-mix(in srgb, var(--amber) 8%, transparent);
+  border-radius: 12px;
+}
+.buy-compliance svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--amber-deep, var(--amber));
+}
+.buy-compliance strong {
+  display: block;
+  font-size: 0.92rem;
+  margin-bottom: 0.3rem;
+  color: var(--ink);
+}
+.buy-compliance p {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+}
+.buy-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0.9rem;
+  margin-top: 1.6rem;
+}
+.buy-actions .btn {
+  justify-content: center;
+}
+@media (max-width: 480px) {
+  .buy-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Адаптив поп-апа покупки (узкие экраны) ---- */
+@media (max-width: 560px) {
+  .buy-card {
+    width: 100%;
+    padding: clamp(1.4rem, 6vw, 2rem) clamp(1.1rem, 5vw, 1.6rem);
+  }
+  .buy-qty-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .buy-slider-row {
+    gap: 0.7rem;
+  }
+  .buy-qty-input {
+    width: 74px;
+    padding: 0.6rem 0.5rem;
+  }
+  .buy-range-ends {
+    font-size: 0.6rem;
+  }
+  .buy-summary {
+    padding: 1.1rem;
+  }
+  .buy-summary-row {
+    flex-wrap: wrap;
+    gap: 0.2rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  .buy-total {
+    font-size: 1.2rem;
+  }
+  .buy-rule {
+    margin: 1.1rem 0;
+  }
+}
+
+/* ---- Модалка «Подробнее» ---- */
+.details-card {
+  width: min(100%, 600px);
+}
+.details-title {
+  margin-top: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+.details-map {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bone);
+  line-height: 0;
+}
+.details-map iframe {
+  display: block;
+  width: 100%;
+  height: 240px;
+  border: 0;
+}
+.details-section {
+  margin-top: 1.5rem;
+}
+.details-section h4,
+.details-row-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.details-section h4 {
+  margin: 0 0 0.5rem;
+}
+.details-section p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
+.details-rows {
+  margin-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+.details-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.details-row-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: right;
+}
+.details-close-btn {
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.6rem;
+}
+@media (max-width: 560px) {
+  .details-card {
+    width: 100%;
+  }
+  .details-map iframe {
+    height: 190px;
+  }
+  .details-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .details-row-value {
+    text-align: left;
   }
 }

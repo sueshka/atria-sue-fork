@@ -5,6 +5,8 @@ import SHead from '../components/SHead.jsx'
 import Reveal from '../components/Reveal.jsx'
 import { useContent } from '../i18n.jsx'
 import { listProperties } from '../lib/properties.js'
+import PurchaseModal from '../components/PurchaseModal.jsx'
+import DetailsModal from '../components/DetailsModal.jsx'
 
 // Запасные градиенты для карточек без фото (бэкенд пока не отдаёт изображения).
 const GRADIENTS = [
@@ -53,6 +55,7 @@ function fromApi(dto, i, ui, filters) {
     statusKey,
     status: statusLabel(filters, statusKey),
     details: [],
+    raw: dto, // полный объект для модалки покупки
   }
 }
 
@@ -81,9 +84,10 @@ function fromStatic(p, ui) {
   }
 }
 
-function PCard({ p, i, ui }) {
+function PCard({ p, i, ui, onBuy, onDetails }) {
   const [open, setOpen] = useState(false)
   const hasDetails = p.details && p.details.length > 0
+  const canBuy = p.raw && p.statusKey !== 'sold'
   return (
     <Reveal as="article" className="pcard" delay={i * 0.08} y={28} amount={0.15}>
       <div
@@ -171,6 +175,20 @@ function PCard({ p, i, ui }) {
             </AnimatePresence>
           </>
         )}
+
+        {p.raw && (
+          <div className="pcard-actions">
+            <button className="btn btn-ghost" onClick={() => onDetails(p.raw)}>
+              <span>{ui.more || 'Подробнее'}</span>
+            </button>
+            {canBuy && (
+              <button className="btn btn-primary" onClick={() => onBuy(p.raw)}>
+                <span>{ui.buy || 'Купить'}</span>
+                <span className="dot" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </Reveal>
   )
@@ -182,6 +200,8 @@ export default function Portfolio() {
 
   const [filter, setFilter] = useState('all')
   const [state, setState] = useState({ status: 'loading', cards: [] })
+  const [buying, setBuying] = useState(null) // выбранный объект для покупки
+  const [details, setDetails] = useState(null) // выбранный объект для «Подробнее»
 
   useEffect(() => {
     let alive = true
@@ -243,10 +263,13 @@ export default function Portfolio() {
         <motion.div className="pgrid" layout>
           <AnimatePresence>
             {items.map((p, i) => (
-              <PCard key={p.id} p={p} i={i} ui={ui} />
+              <PCard key={p.id} p={p} i={i} ui={ui} onBuy={setBuying} onDetails={setDetails} />
             ))}
           </AnimatePresence>
         </motion.div>
+
+        <PurchaseModal property={buying} onClose={() => setBuying(null)} />
+        <DetailsModal property={details} onClose={() => setDetails(null)} />
 
         <Reveal as="div" className="port-strip">
           <p>
